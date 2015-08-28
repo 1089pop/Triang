@@ -14,3 +14,5 @@ NET "Dis_wich[0]" LOC = "K17";
 NET "Dis_wich[1]" LOC = "K18";
 NET "Dis_wich[2]" LOC = "K19";
 NET "Dis_wich[3]" LOC = "K20";
+
+PIN "FDV/count_ins_26_BUFG.O" CLOCK_DEDICATED_ROUTE = FALSE;

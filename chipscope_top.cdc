@@ -1,5 +1,5 @@
 #ChipScope Core Inserter Project File Version 3.0
-#Tue Aug 25 19:23:28 JST 2015
+#Tue Aug 25 19:36:47 JST 2015
 Project.device.designInputFile=J\:\\TREE\\top_cs.ngc
 Project.device.designOutputFile=J\:\\TREE\\top_cs.ngc
 Project.device.deviceFamily=18
@@ -41,7 +41,7 @@ Project.unit<0>.enableStorageQualification=true
 Project.unit<0>.enableTimestamps=false
 Project.unit<0>.timestampDepth=0
 Project.unit<0>.timestampWidth=0
-Project.unit<0>.triggerChannel<0><0>=TRI clk
+Project.unit<0>.triggerChannel<0><0>=FDV count_clk
 Project.unit<0>.triggerChannel<1><0>=TRI reset
 Project.unit<0>.triggerChannel<2><0>=TRI nt
 Project.unit<0>.triggerChannel<3><0>=TRI xi<0>
@@ -77,7 +77,7 @@ Project.unit<0>.triggerMatchCountWidth<5><0>=0
 Project.unit<0>.triggerMatchCountWidth<6><0>=0
 Project.unit<0>.triggerMatchCountWidth<7><0>=0
 Project.unit<0>.triggerMatchCountWidth<8><0>=0
-Project.unit<0>.triggerMatchType<0><0>=1
+Project.unit<0>.triggerMatchType<0><0>=0
 Project.unit<0>.triggerMatchType<1><0>=1
 Project.unit<0>.triggerMatchType<2><0>=0
 Project.unit<0>.triggerMatchType<3><0>=0
