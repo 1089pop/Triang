@@ -1,0 +1,16 @@
+NET "clk" LOC = "A12";
+NET "rst" LOC = "B21";
+
+NET "Dis_data[7]" LOC = "G22";
+NET "Dis_data[6]" LOC = "H18";
+NET "Dis_data[5]" LOC = "H19";
+NET "Dis_data[4]" LOC = "H20";
+NET "Dis_data[3]" LOC = "J17";
+NET "Dis_data[2]" LOC = "J19";
+NET "Dis_data[1]" LOC = "J20";
+NET "Dis_data[0]" LOC = "J22";
+
+NET "Dis_wich[0]" LOC = "K17";
+NET "Dis_wich[1]" LOC = "K18";
+NET "Dis_wich[2]" LOC = "K19";
+NET "Dis_wich[3]" LOC = "K20";
