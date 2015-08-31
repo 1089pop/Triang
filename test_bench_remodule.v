@@ -24,17 +24,20 @@ module test_bench_remodule(clk, reset, busy, nt, xo, yo
 	output reg nt;
 	output reg [2:0] xo, yo;
 	//========STATE=DEFINE===================================================
-	parameter INITIAL_IDLE	= 6'b000001;
-	parameter OUTPUT_SET_1	= 6'b000010;
-	parameter OUTPUT_SET_2	= 6'b000100;
-	parameter OUTPUT_SET_3	= 6'b001000;
-	parameter WAIT_UTL_FIN 	= 6'b010000;
-	parameter STRUE_FINISH 	= 6'b100000;
+	parameter INITIAL_IDLE	= 3'b000;
+	parameter OUTPUT_SET_1	= 3'b001;
+	parameter OUTPUT_SET_2	= 3'b010;
+	parameter OUTPUT_SET_3	= 3'b011;
+	parameter WAIT_UTL_FIN 	= 3'b100;
+	parameter STRUE_FINISH 	= 3'b101;
 	//========NT=MASK========================================================
-	parameter NT_PULL_UP	= 6'b000010;
+	parameter NT_PULL_UP	= 3'b001;
 	//========REG_OF_STATE_DEFINE============================================
-	reg [5:0] STATE;
+	reg [2:0] STATE;
 	reg FINISH_ONE;
+	//=======================================================================
+	wire [3:0] Case_SEL;
+	assign Case_SEL = {FINISH_ONE, STATE};
 	//========X=AND=Y=VALUE=DEFINE===========================================
 	wire [2:0] Ori_Point;
 	wire [2:0] X1_2;
@@ -89,37 +92,39 @@ module test_bench_remodule(clk, reset, busy, nt, xo, yo
 	//always (*) no reset=======================do not use (*)
 	//mux no rst
 	always @(*) begin
-		yo = Zero_Point;
-		xo = Zero_Point;
-		case({FINISH_ONE, STATE})
-			{7'b0000010} : begin
+		case(Case_SEL) 
+			4'b0001 :
 				xo = Ori_Point;
-				yo = Ori_Point;
-			end
-			{7'b0000100} : begin
+			4'b0010 :
 				xo = X1_2;
-				yo = Ori_Point;
-			end
-			{7'b0001000} : begin
+			4'b0011 :
 				xo = Ori_Point;
-				yo = Y1_3;
-			end
-			{7'b1000010} : begin
+			4'b1001 :
 				xo = Ori_Point;
-				yo = Ori_Point;
-			end
-			{7'b1000100} : begin
+			4'b1010 :
 				xo = X2_2;
-				yo = Ori_Point;
-			end
-			{7'b1001000} : begin
+			4'b1011 :
 				xo = Ori_Point;
-				yo = Y2_3;
-			end
-			default : begin
-				yo = Zero_Point;
+			default : 
 				xo = Zero_Point;
-			end
+		endcase
+	end
+	always @(*) begin
+		case(Case_SEL) 
+			4'b0001 :
+				yo = Ori_Point;
+			4'b0010 :
+				yo = Ori_Point;
+			4'b0011 :
+				yo = Y1_3;
+			4'b1001 :
+				yo = Ori_Point;
+			4'b1010 :
+				yo = Ori_Point;
+			4'b1011 :
+				yo = Y2_3;
+			default : 
+				yo = Zero_Point;
 		endcase
 	end
 	//======================================================
@@ -127,18 +132,9 @@ module test_bench_remodule(clk, reset, busy, nt, xo, yo
 	//=======================================================================
 
 	always @(*) begin
-		if (reset) begin
-			// reset
-			nt = 0;
-		end
-		else begin
-			nt = 0;
-			casex(STATE)
-				NT_PULL_UP : begin
-					if (!busy)
-						nt = 1;
-				end
-			endcase
-		end
+		case(STATE)
+			NT_PULL_UP : nt = (!busy) ? 1'b1 : 1'b0;
+			default : nt = 1'b0;
+		endcase
 	end
 endmodule
