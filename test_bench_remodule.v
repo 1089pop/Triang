@@ -32,19 +32,22 @@ module test_bench_remodule(clk, reset, busy, nt, xo, yo
 	parameter STRUE_FINISH 	= 6'b100000;
 	//========NT=MASK========================================================
 	parameter NT_PULL_UP	= 6'b000010;
-	//========X=AND=Y=VALUE=DEFINE===========================================
-	
-	//reg => wire (vallue is const
-	reg [2:0] reg_X1 [1:3];
-	reg [2:0] reg_Y1 [1:3];
-
-	reg [2:0] reg_X2 [1:3];
-	reg [2:0] reg_Y2 [1:3];
-
+	//========REG_OF_STATE_DEFINE============================================
 	reg [5:0] STATE;
-
 	reg FINISH_ONE;
-	
+	//========X=AND=Y=VALUE=DEFINE===========================================
+	wire [2:0] Ori_Point;
+	wire [2:0] X1_2;
+	wire [2:0] Y1_3;
+	wire [2:0] X2_2;
+	wire [2:0] Y2_3;
+	wire [2:0] Zero_Point;
+	assign Ori_Point = 3'b001;
+	assign X1_2 = 3'b100;
+	assign Y1_3 = 3'b111;
+	assign X2_2 = 3'b111;
+	assign Y2_3 = 3'b011;
+	assign Zero_Point = 3'b000;
 	//state update
 	always @(negedge clk or posedge reset) begin
 		if (reset) begin
@@ -82,62 +85,42 @@ module test_bench_remodule(clk, reset, busy, nt, xo, yo
 		end
 	end
 	// use assign 
-	always @(posedge clk or posedge reset) begin
-		if (reset) begin
-			// reset
-			reg_X1[1] <= 3'b001;
-			reg_Y1[1] <= 3'b001;
-			reg_X1[2] <= 3'b100;
-			reg_Y1[2] <= 3'b001;
-			reg_X1[3] <= 3'b001;
-			reg_Y1[3] <= 3'b111;
-			reg_X2[1] <= 3'b001;
-			reg_Y2[1] <= 3'b001;
-			reg_X2[2] <= 3'b111;
-			reg_Y2[2] <= 3'b001;
-			reg_X2[3] <= 3'b001;
-			reg_Y2[3] <= 3'b011;
-		end
-	end
 	//======================================================
 	//always (*) no reset=======================do not use (*)
 	//mux no rst
 	always @(*) begin
-		if (reset) begin
-			// reset
-			xo = 3'b000;
-			yo = 3'b000;
-		end
-		else begin
-			xo = 3'b000;
-			yo = 3'b000;
-			case({FINISH_ONE, STATE})
-				{7'b0000010} : begin
-					xo = reg_X1[1];
-					yo = reg_Y1[1];
-				end
-				{7'b0000100} : begin
-					xo = reg_X1[2];
-					yo = reg_Y1[2];
-				end
-				{7'b0001000} : begin
-					xo = reg_X1[3];
-					yo = reg_Y1[3];
-				end
-				{7'b1000010} : begin
-					xo = reg_X2[1];
-					yo = reg_Y2[1];
-				end
-				{7'b1000100} : begin
-					xo = reg_X2[2];
-					yo = reg_Y2[2];
-				end
-				{7'b1001000} : begin
-					xo = reg_X2[3];
-					yo = reg_Y2[3];
-				end
-				endcase
-		end
+		yo = Zero_Point;
+		xo = Zero_Point;
+		case({FINISH_ONE, STATE})
+			{7'b0000010} : begin
+				xo = Ori_Point;
+				yo = Ori_Point;
+			end
+			{7'b0000100} : begin
+				xo = X1_2;
+				yo = Ori_Point;
+			end
+			{7'b0001000} : begin
+				xo = Ori_Point;
+				yo = Y1_3;
+			end
+			{7'b1000010} : begin
+				xo = Ori_Point;
+				yo = Ori_Point;
+			end
+			{7'b1000100} : begin
+				xo = X2_2;
+				yo = Ori_Point;
+			end
+			{7'b1001000} : begin
+				xo = Ori_Point;
+				yo = Y2_3;
+			end
+			default : begin
+				yo = Zero_Point;
+				xo = Zero_Point;
+			end
+		endcase
 	end
 	//======================================================
 

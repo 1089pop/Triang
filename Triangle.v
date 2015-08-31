@@ -147,20 +147,14 @@ module triangle (clk, reset, nt, xi, yi, busy, po, xo, yo);
 	assign LEFT_VALUE = (x[2]-xo)*(y[3]-y[2]);
 	assign RIGH_VALUE = (yo-y[2])*(x[2]-x[3]);
 	always @(*) begin
-		if (reset) begin
-			// reset
-			po = 0;
-		end
-		else begin
-			po = 0;
-			case(NOW_STATE)
-				RCALCULATING : begin
-					if(LEFT_VALUE >= RIGH_VALUE) begin
-						po = 1;
-					end
+		po = 0;
+		case(NOW_STATE)
+			RCALCULATING : begin
+				if(LEFT_VALUE >= RIGH_VALUE) begin
+					po = 1;
 				end
-			endcase
-		end
+			end
+		endcase
 	end
 
 	always @(*) begin
