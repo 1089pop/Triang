@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 module test_bench_remodule(clk, reset, busy, nt, xo, yo
     );
-	input  clk, reset, busy;
+	input  clk, reset, busy; 
 	output reg nt;
 	output reg [2:0] xo, yo;
 	//========STATE=DEFINE===================================================
@@ -35,9 +35,6 @@ module test_bench_remodule(clk, reset, busy, nt, xo, yo
 	//========REG_OF_STATE_DEFINE============================================
 	reg [2:0] STATE;
 	reg FINISH_ONE;
-	//=======================================================================
-	wire [3:0] Case_SEL;
-	assign Case_SEL = {FINISH_ONE, STATE};
 	//========X=AND=Y=VALUE=DEFINE===========================================
 	wire [2:0] Ori_Point;
 	wire [2:0] X1_2;
@@ -89,42 +86,50 @@ module test_bench_remodule(clk, reset, busy, nt, xo, yo
 	end
 	// use assign 
 	//======================================================
-	//always (*) no reset=======================do not use (*)
+	//always (*) no reset=======================do not use (*){FINISH_ONE, STATE};
 	//mux no rst
 	always @(*) begin
-		case(Case_SEL) 
-			4'b0001 :
-				xo = Ori_Point;
-			4'b0010 :
-				xo = X1_2;
-			4'b0011 :
-				xo = Ori_Point;
-			4'b1001 :
-				xo = Ori_Point;
-			4'b1010 :
-				xo = X2_2;
-			4'b1011 :
-				xo = Ori_Point;
-			default : 
-				xo = Zero_Point;
-		endcase
-	end
-	always @(*) begin
-		case(Case_SEL) 
-			4'b0001 :
-				yo = Ori_Point;
-			4'b0010 :
-				yo = Ori_Point;
-			4'b0011 :
-				yo = Y1_3;
-			4'b1001 :
-				yo = Ori_Point;
-			4'b1010 :
-				yo = Ori_Point;
-			4'b1011 :
-				yo = Y2_3;
-			default : 
-				yo = Zero_Point;
+		case(FINISH_ONE)
+			1'b0 : begin
+				case(STATE) 
+					OUTPUT_SET_1 : begin
+						xo = Ori_Point;
+						yo = Ori_Point;
+					end
+					OUTPUT_SET_2 : begin
+						xo = X1_2;
+						yo = Ori_Point;
+					end
+					OUTPUT_SET_3 : begin
+						xo = Ori_Point;
+						yo = Y1_3;
+					end
+					default : begin
+						xo = Zero_Point;
+						yo = Zero_Point;
+					end
+				endcase
+			end
+			1'b1 : begin
+				case(STATE) 
+					OUTPUT_SET_1 : begin
+						xo = Ori_Point;
+						yo = Ori_Point;
+					end
+					OUTPUT_SET_2 :begin
+						xo = X2_2;
+						yo = Ori_Point;
+					end
+					OUTPUT_SET_3 : begin
+						xo = Ori_Point;
+						yo = Y2_3;
+					end
+					default : begin
+						xo = Zero_Point;
+						yo = Zero_Point;
+					end
+				endcase
+			end
 		endcase
 	end
 	//======================================================
